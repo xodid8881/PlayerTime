@@ -3,13 +3,13 @@ package org.hwabeag.playertime;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.hwabeag.playertime.tasks.TimeTask;
 import org.hwabeag.playertime.commands.MainCommand;
 import org.hwabeag.playertime.config.ConfigManager;
 import org.hwabeag.playertime.events.JoinEvent;
 
 import org.hwabeag.playertime.events.InvClickEvent;
 import org.hwabeag.playertime.expansions.PlayerTimeExpansion;
+import org.hwabeag.playertime.tasks.TimeTask;
 
 import java.util.Objects;
 
