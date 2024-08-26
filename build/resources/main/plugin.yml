@@ -1,0 +1,12 @@
+name: PlayerTime
+version: '1.0-SNAPSHOT'
+main: org.hwabeag.playertime.PlayerTime
+api-version: '1.20'
+
+commands:
+  플레이타임:
+    description: 플레이타임을 확인합니다.
+    usage: /플레이타임
+    aliases: [플탐, ㅍㄹㅇㅌㅇ, ㅍㅌ]
+
+depend: [PlaceholderAPI]
