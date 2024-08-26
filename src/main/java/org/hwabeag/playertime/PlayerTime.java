@@ -9,7 +9,7 @@ import org.hwabeag.playertime.events.JoinEvent;
 
 import org.hwabeag.playertime.events.InvClickEvent;
 import org.hwabeag.playertime.expansions.PlayerTimeExpansion;
-import org.hwabeag.playertime.tasks.TimeTask;
+import org.hwabeag.playertime.schedules.PlayerTimeTask;
 
 import java.util.Objects;
 
@@ -27,12 +27,12 @@ public final class PlayerTime extends JavaPlugin {
             configManager = new ConfigManager();
     }
 
-    private void registerEvents(){
+    private void registerEvents() {
         getServer().getPluginManager().registerEvents(new JoinEvent(), this);
         getServer().getPluginManager().registerEvents(new InvClickEvent(), this);
     }
 
-    private void registerCommands(){
+    private void registerCommands() {
         Objects.requireNonNull(getServer().getPluginCommand("플레이타임")).setExecutor(new MainCommand());
     }
 
@@ -43,8 +43,8 @@ public final class PlayerTime extends JavaPlugin {
         getConfigManager();
         registerCommands();
         registerEvents();
-        Bukkit.getScheduler().scheduleAsyncRepeatingTask(this, new TimeTask(), 20*60, 20*60);
-        if(Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
+        Bukkit.getScheduler().scheduleAsyncRepeatingTask(this, new PlayerTimeTask(), 20 * 60, 20 * 60);
+        if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
             new PlayerTimeExpansion(this).register();
         }
     }
