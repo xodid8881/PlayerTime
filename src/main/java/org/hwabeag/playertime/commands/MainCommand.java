@@ -10,7 +10,7 @@ import org.bukkit.entity.Player;
 import org.hwabeag.playertime.config.ConfigManager;
 import org.hwabeag.playertime.inventorys.TopPlayerTimeGUI;
 import org.jetbrains.annotations.NotNull;
-
+import java.lang.Integer;
 import java.util.Objects;
 
 public class MainCommand implements CommandExecutor {
@@ -24,7 +24,8 @@ public class MainCommand implements CommandExecutor {
             Bukkit.getConsoleSender().sendMessage(Prefix + " 인게임에서만 사용이 가능합니다.");
             if (args.length == 0) {
                 Bukkit.getConsoleSender().sendMessage(Prefix + " /플레이타임 정보 [닉네임] - 나의 정보 혹 다른 유저의 정보를 확인합니다.");
-                Bukkit.getConsoleSender().sendMessage(Prefix + " /플레이타임 설정 [닉네임] [분] - 유저의 정보를 설정합니다.");
+                Bukkit.getConsoleSender().sendMessage(Prefix + " /플레이타임 설정 [닉네임] [분] - 유저의 접속시간을 설정합니다.");
+                Bukkit.getConsoleSender().sendMessage(Prefix + " /플레이타임 지급 [닉네임] [분] - 유저의 접속시간을 추가합니다.");
                 Bukkit.getConsoleSender().sendMessage(Prefix + " /플레이타임 리로드 - 콘피그 정보를 리로드 합니다.");
                 return true;
             }
@@ -77,7 +78,8 @@ public class MainCommand implements CommandExecutor {
                 return true;
             }
             Bukkit.getConsoleSender().sendMessage(Prefix + " /플레이타임 정보 [닉네임] - 나의 정보 혹 다른 유저의 정보를 확인합니다.");
-            Bukkit.getConsoleSender().sendMessage(Prefix + " /플레이타임 설정 [닉네임] [분] - 유저의 정보를 설정합니다.");
+            Bukkit.getConsoleSender().sendMessage(Prefix + " /플레이타임 설정 [닉네임] [분] - 유저의 접속시간을 설정합니다.");
+            Bukkit.getConsoleSender().sendMessage(Prefix + " /플레이타임 지급 [닉네임] [분] - 유저의 접속시간을 추가합니다.");
             Bukkit.getConsoleSender().sendMessage(Prefix + " /플레이타임 리로드 - 콘피그 정보를 리로드 합니다.");
             return false;
         }
@@ -85,7 +87,8 @@ public class MainCommand implements CommandExecutor {
             p.sendMessage(Prefix + " /플레이타임 정보 [닉네임] - 나의 정보 혹 다른 유저의 정보를 확인합니다.");
             p.sendMessage(Prefix + " /플레이타임 순위 - 접속시간 순위를 확인합니다.");
             if (p.isOp()) {
-                p.sendMessage(Prefix + " /플레이타임 설정 [닉네임] [분] - 유저의 정보를 설정합니다.");
+                p.sendMessage(Prefix + " /플레이타임 설정 [닉네임] [분] - 유저의 접속시간을 설정합니다.");
+                p.sendMessage(Prefix + " /플레이타임 지급 [닉네임] [분] - 유저의 접속시간을 추가합니다.");
                 p.sendMessage(Prefix + " /플레이타임 리로드 - 콘피그 정보를 리로드 합니다.");
             }
             return true;
@@ -97,7 +100,7 @@ public class MainCommand implements CommandExecutor {
                 return true;
             }
         }
-        /* String TimeNumber = PlaceholderAPI.setPlaceholders(p, "%playertime_get%"); */
+        /* String TimeNumber = PlaceholderAPI.setPlaceholders(p, "%playertime_player_get%"); */
         // p.sendMessage(Prefix + " 당신의 플레이 타임은 " + TimeNumber + " 분 입니다."); */
         if (args[0].equalsIgnoreCase("정보")) {
             if (args.length == 1) {
@@ -149,6 +152,34 @@ public class MainCommand implements CommandExecutor {
                 }
                 return true;
             }
+            if (args[0].equalsIgnoreCase("지급")) {
+                if (args.length == 1) {
+                    p.sendMessage(Prefix + " /플레이타임 지급 [닉네임] [분] - 유저의 접속시간을 추가합니다.");
+                    return true;
+                }
+                if (args.length == 2) {
+                    p.sendMessage(Prefix + " /플레이타임 지급 [닉네임] [분] - 유저의 접속시간을 추가합니다.");
+                    return true;
+                }
+                if (Bukkit.getServer().getPlayerExact(args[1]) != null) {
+                    Player target = Bukkit.getServer().getPlayerExact(args[1]);
+                    String Name = Objects.requireNonNull(target).getName();
+                    if (PlayerTimeConfig.getString("접속시간." + Name) != null) {
+                        int Time = PlayerTimeConfig.getInt("접속시간." + Name);
+                        int Plus = Time+Integer.parseInt(args[2]);
+                        PlayerTimeConfig.set("접속시간." + Name, Plus);
+                        p.sendMessage(Prefix + " " + Name + " 님에게 시간을 " + args[2] + "분 지급했습니다.");
+                        ConfigManager.saveConfigs();
+                    } else {
+                        PlayerTimeConfig.addDefault("접속시간." + Name, 0);
+                        p.sendMessage(Prefix + " " + Name + " 님의 플레이타임 정보를 생성했습니다.");
+                        ConfigManager.saveConfigs();
+                    }
+                } else {
+                    p.sendMessage(Prefix + " " + args[1] + " 닉네임의 유저가 존재하지 않습니다.");
+                }
+                return true;
+            }
             if (args[0].equalsIgnoreCase("리로드")) {
                 ConfigManager.reloadConfigs();
                 p.sendMessage(Prefix + " 플레이타임 콘피그가 리로드 되었습니다.");
@@ -156,7 +187,8 @@ public class MainCommand implements CommandExecutor {
             }
             p.sendMessage(Prefix + " /플레이타임 정보 [닉네임] - 나의 정보 혹 다른 유저의 정보를 확인합니다.");
             if (p.isOp()) {
-                p.sendMessage(Prefix + " /플레이타임 설정 [닉네임] [분] - 유저의 정보를 설정합니다.");
+                p.sendMessage(Prefix + " /플레이타임 설정 [닉네임] [분] - 유저의 접속시간을 설정합니다.");
+                p.sendMessage(Prefix + " /플레이타임 지급 [닉네임] [분] - 유저의 접속시간을 추가합니다.");
                 p.sendMessage(Prefix + " /플레이타임 리로드 - 콘피그 정보를 리로드 합니다.");
                 Bukkit.getConsoleSender().sendMessage(Prefix + " /플레이타임 papi - papi 테스트 명령어");
             }
