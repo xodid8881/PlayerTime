@@ -1,0 +1,11 @@
+﻿name: PlayerTime
+version: '${version}'
+main: org.hwabeag.playertime.PlayerTime
+api-version: '1.21'
+softdepend: [PlaceholderAPI]
+
+commands:
+  플레이타임:
+    description: 플레이타임 정보를 확인합니다.
+    usage: /플레이타임 [정보|순위|설정|지급|리로드]
+    aliases: [플탐, 접속시간]

@@ -1,0 +1,16 @@
+﻿playertime:
+  prefix: "&a&l[플레이타임]&7"
+
+database:
+  type: "sqlite"
+
+  sqlite:
+    file: "data/playertime.db"
+
+  mysql:
+    host: "127.0.0.1"
+    port: 3306
+    database: "playertime"
+    username: "root"
+    password: ""
+    useSSL: false
